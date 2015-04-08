@@ -1,12 +1,5 @@
-<!DOCTYPE html>
 <html lang="ja">
-<head>
-    <meta content="" name="description">
-    <title>編集 | 社員管理システム</title>
-    <link href="/" rel="canonical">
-    {{ HTML::style('asset/css/pure-min.css') }}
-    {{ HTML::style('asset/css/custom.css') }}
-</head>
+@include('layout.bossheader', ['name' => '>編集 | 社員管理システム'])
 <body>
 
 <header>
@@ -15,10 +8,12 @@
         <ul class="pure-menu-list force-right">
             <li class="pure-menu-item"><span class="pure-menu-link">飯塚 浩二（管理者）</span></li>
             <li class="pure-menu-item"><a href="{{ URL::route('boss.search') }}" class="pure-menu-link">検索</a></li>
-            <li class="pure-menu-item"><a href="" class="pure-menu-link">編集</a></li>
+            <li class="pure-menu-item"><a href="{{ URL::route('employee.editdetail',$id) }}" class="pure-menu-link">編集</a></li>
             <li class="pure-menu-item"><a href="{{ URL::route('logout') }}" class="pure-menu-link">ログアウト</a></li>
+
         </ul>
     </nav>
+
 </header>
 
 <section class="contents">
@@ -69,7 +64,7 @@
                 <tr>
                     <th>権限</th>
                     <td>
-                        <select name="roll" class="pure-input-1">
+                        <select name="role_employee" class="pure-input-1">
                             <option value="">従業員</option>
                         </select>
                     </td>
@@ -80,7 +75,7 @@
                         <select name="roll" class="pure-input-1">
                             <option value="">--</option>
                             @foreach($boss as $value)
-                            <option value="">{{$value['name']}}</option>
+                            <option value="{{$value['id']}}">{{$value['name']}}</option>
                             @endforeach
                         </select>
                     </td>

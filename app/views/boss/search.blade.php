@@ -1,23 +1,15 @@
-<!DOCTYPE html>
 <html lang="ja">
-<head>
-    <meta content="" name="description">
-    <title>検索 | 社員管理システム</title>
-    <link href="/" rel="canonical">
-    {{ HTML::style('asset/css/pure-min.css') }}
-    {{ HTML::style('asset/css/custom.css') }}
-</head>
+@include('layout.bossheader', ['name' => '検索 | 社員管理システム'])
 <body>
 
 <header>
     <nav class="home-menu pure-menu pure-menu-horizontal relative">
         <h1 class="pure-menu-heading"><a href="">社員管理システム</a></h1>
+
         <ul class="pure-menu-list force-right">
-            <li class="pure-menu-item"><span class="pure-menu-link">飯塚 浩二（管理者）</span></li>
-            <li class="pure-menu-item"><a href="{{ URL::route('boss.search') }}" class="pure-menu-link">検索</a></li>
-            <li class="pure-menu-item"><a href="" class="pure-menu-link">追加</a></li>
-            <li class="pure-menu-item"><a href="{{ URL::route('logout') }}" class="pure-menu-link">ログアウト</a></li>
+            @include('layout.bosscommon', ['name' => '飯塚 浩二（管理者）'])
         </ul>
+        
     </nav>
 </header>
 

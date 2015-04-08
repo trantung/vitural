@@ -57,7 +57,7 @@ return array(
 			'host'      => 'localhost',
 			'database'  => 'tungtt_edu_ems',
 			'username'  => 'root',
-			'password'  => 'root',
+			'password'  => '',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',

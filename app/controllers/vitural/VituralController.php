@@ -2,7 +2,7 @@
 use Prototype\Forms\Admin\LoginForm;
 use Prototype\Forms\Admin\EditForm;
 
-class VituralController extends \BaseController {
+class VituralController extends CommonController {
 
      public function __construct(LoginForm $loginForm,EditForm $editForm)
      {
@@ -50,22 +50,15 @@ class VituralController extends \BaseController {
         $input = \Input::all();
         $this->editForm->validate($input, NULL);
         $update = array();
-        $update['name'] = $input['name'];
-        $update['kana'] = $input['kana'];
-        $update['telephone_no'] = $input['telephone_no'];
-        $update['birthday'] = $input['birthday'];
-        $update['password'] = \Hash::make($input['password']);
-        \DB::table('users')->where('id', $id)->update($update);
+        $update = $this->commonUpdateUser($input);
+        \Common::updateDB('users', $id, $update);
         return \View::make('employee.editconfirm')->with(compact('id','input'));
     }
     public function employeeGetConfirm($id)
     {
         $input = array();
-        $user = \User::find($id);
-        $input['name'] = $user->name;
-        $input['kana'] = $user->kana;
-        $input['telephone_no'] = $user->telephone_no;
-        $input['birthday'] = $user->birthday;
+        $user_detail = \User::find($id);
+        $input = $this->commonReturnInputUser($user_detail);
         return \View::make('employee.editconfirm')->with(compact('id','input'));
     }
 
@@ -82,8 +75,6 @@ class VituralController extends \BaseController {
     public function bossTop()
     {
         $boss_id = \Auth::user()->id;
-        // dd($boss_id);
-        // $list_users = \User::where('manager_id',$boss_id)->get()->toArray();
         $list_users = \User::where('manager_id',$boss_id)->get()->toArray();
         return \View::make('boss.top')->with(compact('list_users'));
     }
@@ -91,9 +82,6 @@ class VituralController extends \BaseController {
     {
         $boss_id = \Auth::user()->id;
         return \View::make('boss.search');
-        // dd($boss_id);
-        // $list_users = \User::where('manager_id',$boss_id)->get()->toArray();
-
     }
     public function bossSearchDetail()
     {
@@ -118,7 +106,7 @@ class VituralController extends \BaseController {
             $search = $search->where('created_at','<',$input['end_date']);
         }
         $search = $search->get();
-        // dd($search);
+        
         return \View::make('boss.searchdetail')->with(compact('search'));
 
     }
@@ -135,15 +123,40 @@ class VituralController extends \BaseController {
         $user_detail = \User::find($id);
         $comment = \Comment::where('user_id',$id)->first()->toArray();
         $boss = \User::where('manager_id',ADMIN)->get()->toArray();
-        
         return \View::make('boss.editemp')->with(compact('id','user_detail','comment','boss'));
 
     }
     public function employeeEditDetailConfirm($id)
     {
-        dd(21);
-        return \View::make('boss.editemp');
+        $input = \Input::all();
+        $update= array();
+        $update = $this->commonUpdateUser($input);
+        $update['manager_id'] = $input['roll'];
+        \Common::updateDB('users', $id, $update);
+        $comment_id = \Comment::where('user_id',$id)->first()->id;
+        $update_comment['content'] = $input['note'];
+        \Common::updateDB('comments', $comment_id, $update_comment);
+        $user_detail = \User::find($id);
+        return \View::make('boss.editconfirm')->with(compact('user_detail','input'));
 
+    }
+    public function employeeEditDetailComplete($id)
+    {
+        $user_detail = \User::find($id);
+        $comment = \Comment::where('user_id',$id)->first()->content;
+        return \View::make('boss.editcomp')->with(compact('user_detail','comment'));
+
+    }
+    public function employeeGetEditDetailConfirm($id)
+    {
+        $input = array();
+        $user_detail = \User::find($id);
+        $input = $this->commonReturnInputUser($user_detail);
+        $input['email'] = $user_detail->email;
+        $comment = \Comment::where('user_id',$id)->first()->content;
+        $input['note'] = $comment;
+        $input['roll'] = $user_detail->manager_id;
+        return \View::make('boss.editconfirm')->with(compact('user_detail','input'));
     }
 
 

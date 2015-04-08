@@ -45,6 +45,10 @@ Route::group(array('prefix'=>'tungtt','namespace' => 'Vitural'), function () {
 
     Route::post('/member/{id}/edit/conf', array('as'=>'employee.editdetailconf','uses'=>'VituralController@employeeEditDetailConfirm'));
 
+    Route::get('/member/{id}/edit/conf', array('as'=>'employee.editdetailgetconf','uses'=>'VituralController@employeeGetEditDetailConfirm'));
+
+    Route::post('/member/{id}/edit/comp', array('as'=>'employee.editdetailcomp','uses'=>'VituralController@employeeEditDetailComplete'));
+
     // Route::post('/logout', array('as'=>'employee.top','uses'=>'VituralController@vituralTop'));
     
 });
