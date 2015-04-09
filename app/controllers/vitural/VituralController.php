@@ -3,18 +3,24 @@ use Prototype\Forms\Admin\LoginForm;
 use Prototype\Forms\Admin\EditForm;
 use Prototype\Forms\Admin\BossEditForm;
 use Prototype\Forms\Admin\BossEmailForm;
+use Prototype\Forms\Admin\SearchForm;
+use Prototype\Forms\Admin\AdminEditForm;
 class VituralController extends CommonController {
     public function __construct(
         LoginForm $loginForm,
         EditForm $editForm,
         BossEditForm $bossEditForm,
-        BossEmailForm $bossEmailForm
+        BossEmailForm $bossEmailForm,
+        SearchForm $searchForm,
+        AdminEditForm $adminEditForm
         )
     {
         $this->loginForm = $loginForm;
         $this->editForm = $editForm;
         $this->bossEditForm = $bossEditForm;
         $this->bossEmailForm = $bossEmailForm;
+        $this->searchForm = $searchForm;
+        $this->adminEditForm = $adminEditForm;
         $this->beforeFilter('employee', array('except'=>array('getLogin','postLogin')));
         $this->beforeFilter('admin', array('only'=>array(
                                                     'bossTop','bossSearch',
@@ -94,82 +100,109 @@ class VituralController extends CommonController {
     public function bossTop()
     {
         $boss_id = \Auth::user()->id;
-        $list_users = \User::where('manager_id',$boss_id)->where('role_id','=',EMPLOY)->get()->toArray();
-        return \View::make('boss.top')->with(compact('list_users'));
+        $user_own = \User::find($boss_id);
+        $list_users = \User::where('manager_id',$boss_id)->where('role_id','=',EMPLOY)->paginate(PAGINATE);
+        return \View::make('admin.top')->with(compact('list_users','user_own'));
     }
     public function bossSearch()
     {
         $boss_id = \Auth::user()->id;
-        return \View::make('boss.search');
+        $user_own = \User::find($boss_id);
+        $role_id = \Auth::user()->role_id;
+        return \View::make('boss.search')->with(compact('role_id','user_own'));
     }
     public function bossSearchDetail()
     {
         $input = \Input::all();
-        $search = \DB::table('users');
-        if($input['name'] != NULL){
-            $search = $search->where('name','LIKE','%'.$input['name'].'%');
-        }
-        if($input['email'] != NULL){
-            $search = $search->where('email','LIKE','%'.$input['email'].'%');
-        }
-        if($input['kana'] != NULL){
-            $search = $search->where('kana','LIKE','%'.$input['kana'].'%');
-        }
-        if($input['telephone_no'] != NULL){
-            $search = $search->where('telephone_no','LIKE','%'.$input['telephone_no'].'%');
-        }
-        if($input['start_date'] != NULL){
-            $search = $search->where('birthday','>',$input['start_date']);
-        }
-        if($input['end_date'] != NULL){
-            $search = $search->where('birthday','<',$input['end_date']);
-        }
-        $search = $search->get();
-        
-        return \View::make('boss.searchdetail')->with(compact('search'));
+        $boss_id = \Auth::user()->id;
+        $user_own = \User::find($boss_id);
+        $this->searchForm->validate($input, NULL);
+        $search = $this->commonSearch('users',$input);
+        $search = $search->paginate(PAGINATE);
+        $list_users = $search;
+        return \View::make('boss.searchdetail')->with(compact('list_users','user_own'));
 
     }
     public function employeeDetail($id)
     {
         $user_detail = \User::find($id);
-        $boss_id = \Auth::user()->id;
-        $boss = \User::find($boss_id);
+        $user_id = \Auth::user()->id;
+        $user_own = \User::find($user_id);
         $comment = \Comment::where('user_id',$id)->first();
-        return \View::make('employee.detail')->with(compact('user_detail','comment','boss'));
+        $boss = \User::find($user_detail->manager_id);
+        return \View::make('employee.detail')->with(compact('user_detail','comment','user_own','boss'));
     }
     public function employeeEditDetail($id)
     {
         $user_detail = \User::find($id);
+        $user_id =\Auth::user()->id;
+        $role_id = \User::find($user_id)->role_id;
+        $list_boss = \User::where('role_id',BOSS)->get();
         $comment = \Comment::where('user_id',$id)->first();
-        return \View::make('boss.editemp')->with(compact('id','user_detail','comment'));
+        return \View::make('boss.editemp')->with(compact('id','user_detail','comment','role_id','list_boss'));
 
     }
     public function employeeEditDetailConfirm($id)
     {
         $input = \Input::all();
-        $update= array();
         if($input['email'] !=  \User::find($id)->email){
             $this->bossEmailForm->validate($input, NULL);
         }
-        $update = $this->commonUpdateUser($input);
-        $update['content']= $input['note'];
-        $update['password']= $input['password'];
-        $this->bossEditForm->validate($update, NULL);
-        unset( $update['content']);
-        $update['password'] = \Hash::make($input['password']);
-        \Common::updateDB('users', $id, $update);
-        $update_comment['content'] = $input['note'];
-        $comment_id = \Comment::where('user_id',$id)->first()->id;
-        \Common::updateDB('comments', $comment_id, $update_comment);
-        $user_detail = \User::find($id);
-        return \View::make('boss.editconfirm')->with(compact('user_detail','input'));
+        $input['content'] = $input['note'];
+        unset($input['note']);
+        if(isset($input['roll'])){
+            if($input['roll'] == ADMIN||$input['roll'] == BOSS){
+                $this->bossEditForm->validate($input, NULL);
+            }
+            else{
+                $this->adminEditForm->validate($input, NULL);
+            }
+        }
+        $this->bossEditForm->validate($input, NULL);
+        return \View::make('boss.editconfirm')->with(compact('input','id'));
 
     }
     public function employeeEditDetailComplete($id)
     {
-        $user_detail = \User::find($id);
-        $comment = \Comment::where('user_id',$id)->first()->content;
-        return \View::make('boss.editcomp')->with(compact('user_detail','comment'));
+        $input = \Input::all();
+        $user_id = \Auth::user()->id;
+        $user_check = \User::find($user_id)->role_id;
+        $role_id = \User::find($id)->role_id;
+        if($user_check == ADMIN){
+            if($role_id == EMPLOY){
+                if($input['roll'] == EMPLOY){
+                    $this->updateUserIntoDB($input, $id, 'users');
+                    $this->updateCommentUser($input, $id);
+                }
+                if($input['roll'] == BOSS){
+                    $update = $this->commonUpdateUser($input);
+                    $update['password'] = \Hash::make($input['password']);
+                    \Common::updateDB('users', $id, array('role_id'=>BOSS));
+                }
+                if($input['roll'] == ADMIN){
+                    $this->updateUserIsAdmin($input,$id,'users');
+                }
+            }
+            if($role_id == BOSS){
+                if($input['roll'] == EMPLOY){
+                    $this->updateUserIntoDB($input, $id, 'users');
+                    $comment['user_id'] = $id;
+                    $comment['content'] = $input['content'];
+                    \Common::createComment($comment);
+                }
+                if($input['roll'] == BOSS){
+                    $this->updateUserIntoDB($input, $id, 'users');                
+                }
+                if($input['roll'] == ADMIN){
+                    $this->updateUserIsAdmin($input,$id,'users');
+                }
+            }
+        }
+        if($user_check == BOSS){
+            $this->updateUserIntoDB($input, $id, 'users');
+            $this->updateCommentUser($input, $id);
+        }
+        return \View::make('boss.editcomp')->with(compact('id'));
 
     }
     public function employeeGetEditDetailConfirm($id)
@@ -186,8 +219,9 @@ class VituralController extends CommonController {
 
     public function employeeGetDeleteConfirm($id)
     {
+
         $user_detail = \User::find($id);
-        $comment = \Comment::where('user_id',$id)->first()->content;
+        $comment = \Comment::where('user_id',$id)->first();
         return \View::make('employee.delete')->with(compact('user_detail','comment'));
     }
 
@@ -225,8 +259,8 @@ class VituralController extends CommonController {
         $input = array();
         $comment = array();
         $input = \Input::all();
-        $input['manager_id'] = \Auth::user()->id;
-        $input['role_id'] = EMPLOY;
+        $input['role_id'] = $this->getRoleId($input);
+        $input['manager_id'] = $this->getMangerId($input);
         $user_id = \Common::createUser($input);
         $comment['user_id'] = $user_id;
         $comment['content'] = $input['note'];
@@ -236,9 +270,32 @@ class VituralController extends CommonController {
     public function adminTop()
     {
         $admin_id = \Auth::user()->id;
-        $admin = \User::find($admin_id);
-        $admin_detail = \User::where('id','!=',$admin_id)->paginate(PAGINATE);
-        return \View::make('admin.top')->with(compact('admin_detail','admin'));
+        $user_own = \User::find($admin_id);
+        $list_users = \User::where('role_id','!=',ADMIN)->paginate(PAGINATE);
+        return \View::make('admin.top')->with(compact('list_users','user_own'));
+    }
+    public function adminSearchDetail()
+    {
+        $input = \Input::all();
+        $admin_id = \Auth::user()->id;
+        $user_own = \User::find($admin_id);
+        $this->searchForm->validate($input, NULL);
+        $search = $this->commonSearch('users',$input);
+        if(isset($input['admin']))
+        {
+            $search = $search->where('role_id',ADMIN);
+        }
+        if(isset($input['boss']))
+        {
+            $search = $search->where('manager_id',$admin_id)->where('role_id',BOSS);
+        }
+        if(isset($input['employee']))
+        {
+            $search = $search->where('role_id',EMPLOY);
+        }
+        $search = $search->paginate(PAGINATE);
+        $list_users = $search;
+        return \View::make('boss.searchdetail')->with(compact('list_users','user_own'));
     }
 
 }

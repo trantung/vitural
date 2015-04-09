@@ -47,9 +47,24 @@
                 </tr>
                 <tr>
                     <th>ノート</th>
-                    <td>{{$comment}}
+                    <td>
+                        @if(isset($comment->content))
+                            {{ $comment->content }}
+                        @endif
                     </td>
+
                 </tr>
+                @if(\User::find(\Auth::user()->id)->role_id == 1)
+                <tr>
+                    <th>Boss</th>
+                    <td>
+                        @if($user_detail->role_id == EMPLOY)
+                            {{\User::find($user_detail->manager_id)->name }}
+                        @endif
+                    </td>
+                    
+                </tr>
+                @endif
                 <tr>
                     <td colspan="2" align="right">
                         <a class="pure-button pure-button-primary" href="{{URL::route('employee.detail',$user_detail->id)}}">戻る</a>

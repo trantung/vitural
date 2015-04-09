@@ -7,7 +7,7 @@
     <nav class="home-menu pure-menu pure-menu-horizontal relative">
         <h1 class="pure-menu-heading"><a href="">社員管理システム</a></h1>
         
-            @include('layout.bosscommon', ['name' => '飯塚 浩二（管理者）'])
+           @include('layout.admincommon', ['name' => $user_own->name,'role_id' =>$user_own->id])
 
     </nav>
 </header>
@@ -41,6 +41,18 @@
                         {{Form::text('end_date','', array('placeholder'=>'終了日'))}}
                     </td>
                 </tr>
+                @if($user_own->role_id == ADMIN)
+                <tr>
+                    <td>権限</td>
+                    <td colspan="3" align="center">
+                        <ul class="pure-menu-list pure-menu-horizontal">
+                            <li class="pure-menu-item pure-u-1-6"><label for="admin"><input type="checkbox" id="admin" name="admin" value="{{ADMIN}}">管理者</label></li>
+                            <li class="pure-menu-item pure-u-1-6"><label for="boss"><input type="checkbox" id="boss" name="boss" value="{{BOSS}}">BOSS</label></li>
+                            <li class="pure-menu-item pure-u-1-6"><label for="employee"><input type="checkbox" id="employee" name="employee" value="{{EMPLOY}}">従業員</label></li>
+                        </ul>
+                    </td>
+                </tr>
+                @endif
                 <tr>
                     <td colspan="4" align="right">
                         <button class="pure-button pure-button-primary" type="submit">検索</button>
@@ -50,9 +62,10 @@
         </table>
         {{Form::close()}}
     </section>
-    @if(!empty($search))
+    @if(!empty($list_users))
     <nav class="pure-menu pure-menu-horizontal">
-        <ul class="pure-menu-list">
+        {{$list_users->links()}}
+       <!--  <ul class="pure-menu-list">
             <li class="pure-menu-item"><a href="" class="pure-menu-link pure-button">first</a></li>
             <li class="pure-menu-item"><a href="" class="pure-menu-link pure-button">back</a></li>
             <li class="pure-menu-item">...</li>
@@ -62,7 +75,7 @@
             <li class="pure-menu-item">...</li>
             <li class="pure-menu-item"><a href="" class="pure-menu-link pure-button">next</a></li>
             <li class="pure-menu-item"><a href="" class="pure-menu-link pure-button">last</a></li>
-        </ul>
+        </ul> -->
     </nav>
     <section>
         <table class="pure-table pure-table-bordered">
@@ -77,7 +90,7 @@
                 </tr>
             </thead>
             <tbody>
-            @foreach($search as $search_list)
+            @foreach($list_users as $search_list)
                 <tr class="pure-table-odd">
                     <td>{{$search_list->id}}</td>
                     <td><a href="{{ URL::route('employee.detail',$search_list->id) }}">{{$search_list->name}}</a></td>
@@ -91,7 +104,8 @@
         </table>
     </section>
     <nav class="pure-menu pure-menu-horizontal">
-        <ul class="pure-menu-list">
+        {{$list_users->links()}}
+        <!-- <ul class="pure-menu-list">
             <li class="pure-menu-item"><a href="" class="pure-menu-link pure-button">first</a></li>
             <li class="pure-menu-item"><a href="" class="pure-menu-link pure-button">back</a></li>
             <li class="pure-menu-item">...</li>
@@ -101,7 +115,7 @@
             <li class="pure-menu-item">...</li>
             <li class="pure-menu-item"><a href="" class="pure-menu-link pure-button">next</a></li>
             <li class="pure-menu-item"><a href="" class="pure-menu-link pure-button">last</a></li>
-        </ul>
+        </ul> -->
     </nav>
     @else
         <section class="error-box">{{ NO_RESULT_SEARCH }}</section>

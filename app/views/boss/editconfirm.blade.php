@@ -15,12 +15,15 @@
 	<h2>編集（確認）</h2>
 
 	<section>
-		{{Form::open(array('id'=>'form','route'=>array('employee.editdetailcomp','id'=>$user_detail->id)))}}
+		{{Form::open(array('id'=>'form','route'=>array('employee.editdetailcomp','id'=>$id)))}}
+		@foreach($input as $key=>$value)
+            {{ Form::hidden($key, $value) }}
+        @endforeach
 		<table class="pure-table pure-table-bordered" width="100%">
 			<tbody>
 				<tr>
 					<th>ID</th>
-					<td>{{ $user_detail->id }}</td>
+					<td>{{ $id }}</td>
 				</tr>
 				<tr>
 					<th>名前</th>
@@ -44,20 +47,38 @@
 				</tr>
 				<tr>
 					<th>ノート</th>
-					<td>{{$input['note']}}
+					<td>{{$input['content']}}
+					</td>
+				</tr>
+
+				<tr>
+					<th>権限</th>
+					<td>
+					@if(isset($input['roll']))
+                    	@if($input['roll'] == 2)
+                        	{{BOSS_PERMISSION}}
+                    	@elseif($input['roll'] == 1)
+                    		{{ADMIN_PERMISSION}}
+                    	@else
+                        	{{EMPLOY_PERMISSION}}
+                       	@endif
+					@else
+						{{従業員}}
+					@endif
 					</td>
 				</tr>
 				<tr>
-					<th>権限</th>
-					<td>従業員</td>
-				</tr>
-				<tr>
 					<th>BOSS</th>
-					<td>{{\User::find($input['roll'])->name}}</td>
+					<td>
+					@if(isset($input['roll_boss']))
+                        {{\User::find($input['roll_boss'])->name}}
+                    @endif
+					</td>
 				</tr>
+
 				<tr>
 					<td colspan="2" align="right">
-						<a class="pure-button pure-button-primary" href="{{URL::route('employee.editdetail',$user_detail->id)}}">戻る</a>
+						<a class="pure-button pure-button-primary" href="{{URL::route('employee.editdetail',$id)}}">戻る</a>
                         {{ Form::submit('更新',array('class'=>'pure-button button-error')) }}
 					</td>
 				</tr>

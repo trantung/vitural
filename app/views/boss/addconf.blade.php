@@ -46,6 +46,30 @@
                     </td>
                 </tr>
                 <tr>
+                    <th>権限</th>
+                    <td>
+                    @if(isset($input['roll']))
+                        @if($input['roll'] == 2)
+                            {{BOSS_PERMISSION}}
+                        @elseif($input['roll'] == 1)
+                            {{ADMIN_PERMISSION}}
+                        @else
+                            {{EMPLOY_PERMISSION}}
+                        @endif
+                    @else
+                        {{従業員}}
+                    @endif
+                    </td>
+                </tr>
+                <tr>
+                    <th>BOSS</th>
+                    <td>
+                    @if(isset($input['roll_boss']))
+                        {{\User::find($input['roll_boss'])->name}}
+                    @endif
+                    </td>
+                </tr>
+                <tr>
                     <td colspan="2" align="right">
                     <a class="pure-button pure-button-primary" href="{{ URL::route('boss.add') }}">戻る</a>
                         {{ Form::submit('登録',array('class'=>'pure-button button-error')) }}

@@ -65,6 +65,10 @@ Route::group(array('prefix'=>'tungtt','namespace' => 'Vitural'), function () {
     
     Route::get('/admin', array('as'=>'admin.top','uses'=>'VituralController@adminTop'));
 
+    // Route::get('/search', array('as'=>'admin.search','uses'=>'VituralController@bossSearch'));
+
+    Route::get('/search?admin', array('as'=>'admin.search_detail','uses'=>'VituralController@adminSearchDetail'));
+
     
 });
 

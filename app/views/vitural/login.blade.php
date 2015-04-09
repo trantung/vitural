@@ -8,7 +8,6 @@
         $error_messages = ERROR_MESSAGES;
     ?>
     <section class="error-box">
-    {{-- {{ dd($email_error) }} --}}
     @if(Session::has('message') && $error_box == 1)
         <h3>!!ERROR!!</h3>
     @endif

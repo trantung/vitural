@@ -14,10 +14,10 @@
 
 	<section>
 		<p>
-			ID：<a href="">{{$user_detail->id}}</a>を更新しました。
+			ID：<a href="">{{$id}}</a>を更新しました。
 		</p>
 		<div>
-			<a class="pure-button pure-button-primary" href="{{URL::route('employee.editdetailgetconf',$user_detail->id)}}">検索画面へ</a>
+			<a class="pure-button pure-button-primary" href="{{URL::route('boss.search')}}">検索画面へ</a>
 		</div>
 	</section>
 </section>

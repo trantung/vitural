@@ -67,8 +67,31 @@
                 </tr>
                 <tr>
                     <th>パスワード</th>
-                    <td>{{Form::text('password','', array('class'=>'pure-input-1'))}}</td>
+                    <td><input type="password" name="password" class="pure-input-1"></td>
                 </tr>
+                @if($role_id == ADMIN)
+                <tr>
+                    <th>権限</th>
+                    <td>
+                        <select name="roll" class="pure-input-1">
+                            <option value="3">従業員</option>
+                            <option value="2">BOSS</option>
+                            <option value="1">管理者</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>BOSS</th>
+                    <td>
+                        <select name="roll_boss" class="pure-input-1">
+                            <option value="">--</option>
+                            @foreach($list_boss as $boss)
+                            <option value="{{$boss->id}}">{{$boss->name}}</option>
+                            @endforeach
+                        </select>
+                    </td>
+                </tr>
+                @endif
                 <tr>
                     <td colspan="2" align="right">
                         <a class="pure-button pure-button-primary" href="{{URL::route('employee.detail',$id)}}">戻る</a>
