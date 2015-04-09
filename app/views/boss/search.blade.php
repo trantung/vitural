@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="ja">
 @include('layout.bossheader', ['name' => '検索 | 社員管理システム'])
 <body>

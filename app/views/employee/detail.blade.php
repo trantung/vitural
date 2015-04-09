@@ -1,19 +1,13 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-    <meta content="" name="description">
-    <title>追加（確認） | 社員管理システム</title>
-    <link href="/" rel="canonical">
-    {{ HTML::style('asset/css/pure-min.css') }}
-    {{ HTML::style('asset/css/custom.css') }}
-</head>
+@include('layout.bossheader', ['name' => '追加（確認） | 社員管理システム'])
 <body>
 
 <header>
     <nav class="home-menu pure-menu pure-menu-horizontal relative">
         <h1 class="pure-menu-heading"><a href="">社員管理システム</a></h1>
         <ul class="pure-menu-list force-right">
-            <li class="pure-menu-item"><span class="pure-menu-link">飯塚 浩二（管理者）</span></li>
+            <li class="pure-menu-item"><span class="pure-menu-link">岸 由一郎</span></li>
             <li class="pure-menu-item"><a href="{{ URL::route('boss.search') }}" class="pure-menu-link">検索</a></li>
             <li class="pure-menu-item"><a href="" class="pure-menu-link">追加</a></li>
             <li class="pure-menu-item"><a href="{{ URL::route('logout') }}" class="pure-menu-link">ログアウト</a></li>
@@ -22,11 +16,11 @@
 </header>
 
 <section class="contents">
-    <h2>追加（確認）</h2>
+    <h2>青木 栄一(あおき えいいち)の詳細</h2>
 
     <section>
-    {{Form::open(array('method'=>'GET','id'=>'form','route'=>array('employee.editdetail','id'=>$user_detail->id),'class' => 'pure-form pure-u-3-4'))}}
         <table class="pure-table pure-table-bordered" width="100%">
+        {{Form::open(array('method'=>'GET','id'=>'form','route'=>array('employee.editdetail','id'=>$user_detail->id),'class' => 'pure-form pure-u-3-4'))}}
             <tbody>
                 <tr>
                     <th>名前</th>
@@ -50,7 +44,10 @@
                 </tr>
                 <tr>
                     <th>ノート</th>
-                    <td>{{$comment['content']}}
+                    <td>
+                        @if(isset($comment))
+                            {{$comment->content}}
+                        @endif
                     </td>
                 </tr>
                 <tr>
@@ -63,17 +60,20 @@
                 </tr>
                 <tr>
                     <td colspan="2" align="right">
-                        <a class="pure-button pure-button-primary" href="{{ URL::route('boss.top') }}">戻る</a>
-                        {{ Form::submit('登録',array('class'=>'pure-button button-error')) }}
+                        <a class="pure-button pure-button-primary" href="{{ URL::route('boss.search') }}">検索画面へ</a>
+                        {{ Form::submit('編集',array('class'=>'pure-button button-secondary')) }}
+                        <a class="pure-button button-error" href="{{ URL::route('employee.deleteconf',$user_detail->id) }}">削除</a>
                     </td>
                 </tr>
             </tbody>
+            {{Form::close()}}
         </table>
-        {{Form::close()}}
     </section>
 </section>
 
-@include('layout.footer')
+<footer>
+Employer Management System
+</footer>
 
 </body>
 </html>

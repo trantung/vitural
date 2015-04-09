@@ -48,6 +48,23 @@ Route::filter('auth', function()
 	}
 });
 
+Route::filter('employee', function ()
+{
+
+    $filter = Prototype\Filters\Factory::createFilter();
+
+
+    return $filter->employee();
+});
+Route::filter('admin', function ()
+{
+
+    $filter = Prototype\Filters\Factory::createFilter();
+
+    return $filter->admin();
+});
+
+
 
 Route::filter('auth.basic', function()
 {

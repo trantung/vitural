@@ -5,20 +5,17 @@ class WebFilters {
         if (\Auth::guest()) \Prototype\Common\ThrowCommonExceptions::throwUnAuthenticate();
     }
 
-    public function admin() {
+    public function employee() {
             if (\Auth::guest()) 
-            return \Redirect::route('login');
+            return \Redirect::route('vitural.getlogin');
     }
 
-    public function account() {
-        // if (\Auth::guest()) \Prototype\Common\ThrowCommonExceptions::throwUnAuthenticate();
+    public function admin() {
         if (\Auth::guest()){
-
-            return \Redirect::route('get.login');
+            return \Redirect::route('vitural.getlogin');
         }
-        else if (\Auth::user()->user_role_id != ACCOUNT){ 
-            
-            return \Redirect::route('get.login');
+        else if (\Auth::user()->role_id == EMPLOY){ 
+            return \Redirect::route('employee.top');
         }
     }
 }

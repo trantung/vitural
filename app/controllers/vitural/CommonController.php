@@ -9,7 +9,7 @@ class CommonController extends \BaseController {
         $update['kana'] = $input['kana'];
         $update['telephone_no'] = $input['telephone_no'];
         $update['birthday'] = $input['birthday'];
-        $update['password'] = \Hash::make($input['password']);
+        $update['email'] = $input['email'];
         return $update;
 	}
 	public function commonReturnInputUser($user_detail)

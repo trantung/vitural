@@ -8,4 +8,14 @@ class Common extends Eloquent
 	{
 		DB::table($table)->where('id',$id)->update($update);
 	}
+    public static function createUser($create_user)
+    {
+        User::create($create_user);
+        $user_id = User::where('email',$create_user['email'])->first()->id;
+        return $user_id;
+    }
+    public static function createComment($comment)
+    {
+        Comment::create($comment);
+    }
 }

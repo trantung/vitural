@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="ja">
 @include('layout.bossheader', ['name' => '編集（完了） | 社員管理システム'])
 <body>

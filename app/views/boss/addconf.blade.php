@@ -1,35 +1,25 @@
+<!DOCTYPE html>
 <html lang="ja">
-<head>
-    <meta content="" name="description">
-    <title>編集（確認） | 社員管理システム</title>
-    <link href="/" rel="canonical">
-    {{ HTML::style('asset/css/pure-min.css') }}
-    {{ HTML::style('asset/css/custom.css') }}
-</head>
+    @include('layout.bossheader', ['name' => '追加（確認） | 社員管理システム'])
 <body>
 
 <header>
     <nav class="home-menu pure-menu pure-menu-horizontal relative">
         <h1 class="pure-menu-heading"><a href="">社員管理システム</a></h1>
-        <ul class="pure-menu-list force-right">
-            <li class="pure-menu-item"><span class="pure-menu-link">{{$input['name']}}</span></li>
-            <li class="pure-menu-item"><a href="{{ URL::route('logout') }}" class="pure-menu-link">ログアウト</a></li>
-        </ul>
+        @include('layout.bosscommon', ['name' => '岸 由一郎'])
     </nav>
 </header>
 
 <section class="contents">
-    <h2>編集（確認）</h2>
+    <h2>追加（確認）</h2>
 
     <section>
-        {{Form::open(array('id'=>'form','route'=>array('employee.comp','id'=>$id),'class' => 'pure-form pure-u-3-4'))}}
+        {{Form::open(array('id'=>'form','route'=>array('boss.addcomp'),'class' => 'pure-form pure-u-3-4'))}}
+        @foreach($input as $key=>$value)
+            {{ Form::hidden($key, $value) }}
+        @endforeach
         <table class="pure-table pure-table-bordered" width="100%">
-        {{-- {{dd($input)}} --}}
             <tbody>
-                <tr>
-                    <th>ID</th>
-                    <td>{{$id}}</td>
-                </tr>
                 <tr>
                     <th>名前</th>
                     <td>{{$input['name']}}</td>
@@ -51,17 +41,22 @@
                     <td>{{$input['birthday']}}</td>
                 </tr>
                 <tr>
+                    <th>ノート</th>
+                    <td>{{$input['note']}}
+                    </td>
+                </tr>
+                <tr>
                     <td colspan="2" align="right">
-                       
-                        <a class="pure-button pure-button-primary" href="{{ URL::route('employee.edit',$id) }}">戻る</a>
-                        {{ Form::submit('更新',array('class'=>'pure-button button-error')) }}
+                    <a class="pure-button pure-button-primary" href="{{ URL::route('boss.add') }}">戻る</a>
+                        {{ Form::submit('登録',array('class'=>'pure-button button-error')) }}
                     </td>
                 </tr>
             </tbody>
         </table>
-        {{ Form::close() }}
+        {{Form::close()}}
     </section>
 </section>
 @include('layout.footer')
+
 </body>
 </html>

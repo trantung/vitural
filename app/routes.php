@@ -33,7 +33,7 @@ Route::group(array('prefix'=>'tungtt','namespace' => 'Vitural'), function () {
 
     Route::get('/logout', array('as'=>'logout','uses'=>'VituralController@logout'));
 
-    Route::get('/', array('as'=>'boss.top','uses'=>'VituralController@bossTop'));
+    Route::get('/boss', array('as'=>'boss.top','uses'=>'VituralController@bossTop'));
 
     Route::get('/search', array('as'=>'boss.search','uses'=>'VituralController@bossSearch'));
 
@@ -49,18 +49,22 @@ Route::group(array('prefix'=>'tungtt','namespace' => 'Vitural'), function () {
 
     Route::post('/member/{id}/edit/comp', array('as'=>'employee.editdetailcomp','uses'=>'VituralController@employeeEditDetailComplete'));
 
-    // Route::post('/logout', array('as'=>'employee.top','uses'=>'VituralController@vituralTop'));
+    Route::get('/member/{id}/delete/conf', array('as'=>'employee.getdeleteconf','uses'=>'VituralController@employeeGetDeleteConfirm'));
+
+    Route::post('/member/{id}/delete/conf', array('as'=>'employee.deleteconf','uses'=>'VituralController@employeeDeleteConfirm'));
+
+    Route::post('/member/{id}/delete/comp', array('as'=>'employee.deletecomp','uses'=>'VituralController@employeeDeleteComplete'));
+
+    Route::get('/add', array('as'=>'boss.add','uses'=>'VituralController@add'));
+
+    Route::post('/add/conf', array('as'=>'boss.addconf','uses'=>'VituralController@addConfirm'));
+
+    Route::post('/add/comp', array('as'=>'boss.addcomp','uses'=>'VituralController@addComplete'));
+
+    Route::get('/admin', array('as'=>'admin.top','uses'=>'VituralController@adminTop'));
+    
+    Route::get('/admin', array('as'=>'admin.top','uses'=>'VituralController@adminTop'));
+
     
 });
 
-// //group routes for boss
-// Route::group(array('prefix' => 'boss', 'namespace' => 'Boss'), function () {
-//     Route::get('/', array('as'=>'boss.getlogin','uses'=>'BossController@getLogin'));
-//     Route::post('/postlogin', array('as'=>'boss.postlogin','uses'=>'BossController@postLogin'));
-// });
-
-// //group routes for admin
-// Route::group(array('prefix' => 'admin', 'namespace' => 'Admin'), function () {
-//     Route::get('/', array('as'=>'admin.getlogin','uses'=>'AdminController@getLogin'));
-//     Route::post('/postlogin', array('as'=>'admin.postlogin','uses'=>'AdminController@postLogin'));
-// });

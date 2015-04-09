@@ -2,21 +2,20 @@
 <html lang="ja">
 @include('layout.bossheader', ['name' => '社員管理システム'])
 <body>
-
 <header>
     <nav class="home-menu pure-menu pure-menu-horizontal relative">
         <h1 class="pure-menu-heading"><a href="">社員管理システム</a></h1>
-        
-            @include('layout.bosscommon', ['name' => '岸 由一郎'])
-
-    </nav>
+        @include('layout.admincommon', ['name' => $admin->name])
+</nav>
 </header>
 
 <section class="contents">
     <h2>トップページ</h2>
-
+        
     <nav class="pure-menu pure-menu-horizontal">
-        <ul class="pure-menu-list">
+    {{$admin_detail->links()}}
+
+{{--         <ul class="pure-menu-list">
             <li class="pure-menu-item"><a href="" class="pure-menu-link pure-button">first</a></li>
             <li class="pure-menu-item"><a href="" class="pure-menu-link pure-button">back</a></li>
             <li class="pure-menu-item">...</li>
@@ -26,10 +25,10 @@
             <li class="pure-menu-item">...</li>
             <li class="pure-menu-item"><a href="" class="pure-menu-link pure-button">next</a></li>
             <li class="pure-menu-item"><a href="" class="pure-menu-link pure-button">last</a></li>
-        </ul>
+        </ul> --}}
     </nav>
-
     <section>
+    @if(!empty($admin_detail))
         <table class="pure-table pure-table-bordered">
             <thead>
                 <tr>
@@ -39,25 +38,34 @@
                     <th>電話番号</th>
                     <th>生年月日</th>
                     <th>更新日時</th>
+                    <th>権限</th>
                 </tr>
             </thead>
             <tbody>
-            @foreach($list_users as $list_user)
+            @foreach($admin_detail as $admin)
                 <tr class="pure-table-odd">
-                    <td>{{$list_user['id']}}</td>
-                    <td><a href="{{ URL::route('employee.detail',$list_user['id']) }}">{{$list_user['name']}}({{EMPLOY_PERMISSION}})</a></td>
-                    <td>{{$list_user['email']}}</td>
-                    <td>{{$list_user['telephone_no']}}</td>
-                    <td>{{$list_user['birthday']}}</td>
-                    <td>{{$list_user['updated_at']}}</td>
+                    <?php 
+                    if($admin['role_id'] == 2)
+                        $permission = 'Boss';
+                    else
+                        $permission = 'Employee';
+                    ?>
+                    <td>{{$admin['id']}}</td>
+                    <td><a href="">{{ $admin['name'] }}({{$permission}}）</a></td>
+                    <td>{{$admin['email']}}</td>
+                    <td>{{$admin['telephone_no']}}</td>
+                    <td>{{$admin['birthday']}}</td>
+                    <td>{{$admin['updated_at']}}</td>
+                    <td> {{$permission}} </td>
                 </tr>
-            @endforeach
+                @endforeach
             </tbody>
         </table>
+    @endif
     </section>
 
     <nav class="pure-menu pure-menu-horizontal">
-        <ul class="pure-menu-list">
+{{--         <ul class="pure-menu-list">
             <li class="pure-menu-item"><a href="" class="pure-menu-link pure-button">first</a></li>
             <li class="pure-menu-item"><a href="" class="pure-menu-link pure-button">back</a></li>
             <li class="pure-menu-item">...</li>
@@ -67,7 +75,8 @@
             <li class="pure-menu-item">...</li>
             <li class="pure-menu-item"><a href="" class="pure-menu-link pure-button">next</a></li>
             <li class="pure-menu-item"><a href="" class="pure-menu-link pure-button">last</a></li>
-        </ul>
+        </ul> --}}
+            {{$admin_detail->links()}}
     </nav>
 </section>
 

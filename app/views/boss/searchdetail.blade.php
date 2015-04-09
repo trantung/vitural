@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="ja">
 @include('layout.bossheader', ['name' => '検索 | 社員管理システム'])
 <body>
@@ -49,6 +50,7 @@
         </table>
         {{Form::close()}}
     </section>
+    @if(!empty($search))
     <nav class="pure-menu pure-menu-horizontal">
         <ul class="pure-menu-list">
             <li class="pure-menu-item"><a href="" class="pure-menu-link pure-button">first</a></li>
@@ -62,7 +64,6 @@
             <li class="pure-menu-item"><a href="" class="pure-menu-link pure-button">last</a></li>
         </ul>
     </nav>
-
     <section>
         <table class="pure-table pure-table-bordered">
             <thead>
@@ -89,7 +90,6 @@
             </tbody>
         </table>
     </section>
-
     <nav class="pure-menu pure-menu-horizontal">
         <ul class="pure-menu-list">
             <li class="pure-menu-item"><a href="" class="pure-menu-link pure-button">first</a></li>
@@ -103,6 +103,10 @@
             <li class="pure-menu-item"><a href="" class="pure-menu-link pure-button">last</a></li>
         </ul>
     </nav>
+    @else
+        <section class="error-box">{{ NO_RESULT_SEARCH }}</section>
+    @endif
+
 </section>
 
 <footer>

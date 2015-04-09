@@ -27,7 +27,7 @@ class CreateUsersTable extends Migration {
                 ->references('id')
                 ->on('roles')
                 ->onDelete('cascade');
-         	$table->dateTime("deleted_at")->nullable;
+         	$table->softDeletes()->nullable();
   			$table->timestamps();
 		});
 	}

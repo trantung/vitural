@@ -7,5 +7,6 @@ define('ERROR_MESSAGES',1);
 define('EMAIL_REQUIRED','メールアドレスを入力してください。');
 define('PASSWORD_REQUIRED','パスワードを入力してください。');
 define('EMAIL_PASSWORD_ERROR','メールアドレス またはパスワードが誤っています。');
-define('PAGINATE',1);
+define('PAGINATE',2);
 define('EMPLOY_PERMISSION','従業員');
+define('NO_RESULT_SEARCH','検索結果にマッチしませんでした。');

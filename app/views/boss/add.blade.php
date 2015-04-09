@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="ja">
-@include('layout.bossheader', ['name' => '>編集 | 社員管理システム'])
+@include('layout.bossheader', ['name' => '追加 | 社員管理システム'])
 <body>
 
 <header>
     <nav class="home-menu pure-menu pure-menu-horizontal relative">
         <h1 class="pure-menu-heading"><a href="">社員管理システム</a></h1>
         @include('layout.bosscommon', ['name' => '岸 由一郎'])
-
+    </nav>
 </header>
+
 <section class="contents">
-    <h2>編集</h2>
-    <?php 
+    <h2>追加</h2>
+<?php 
         $error_box = ERROR_BOX;
         $error_messages = ERROR_MESSAGES;
     ?>
@@ -28,56 +29,50 @@
     @endif
     </section>
     <section>
-    {{Form::open(array('id'=>'form','route'=>array('employee.editdetailconf','id'=>$id),'class' => 'pure-form pure-u-3-4'))}}
+        {{Form::open(array('id'=>'form','route'=>array('boss.addconf'),'class' => 'pure-form pure-u-3-4'))}}
         <table class="pure-table pure-table-bordered" width="100%">
             <tbody>
                 <tr>
-                    <th>ID</th>
-                    <td>{{$user_detail->id}}</td>
-                </tr>
-                <tr>
                     <th>名前</th>
-                    <td>
-                   {{Form::text('name',$user_detail->name, array('class'=>'pure-input-1'))}}
-                    </td>
+                    <td><input type="text" name="name" value="" class="pure-input-1"></td>
                 </tr>
                 <tr>
                     <th>名前（カナ）</th>
-                    <td>{{Form::text('kana',$user_detail->kana, array('class'=>'pure-input-1'))}}</td>
+                    <td><input type="text" name="kana" value="" class="pure-input-1"></td>
                 </tr>
                 <tr>
                     <th>メールアドレス</th>
-                    <td>{{Form::text('email',$user_detail->email, array('class'=>'pure-input-1'))}}</td>
+                    <td><input type="text" name="email" value="" class="pure-input-1"></td>
                 </tr>
                 <tr>
                     <th>メールアドレス（確認）</th>
-                    <td>{{Form::text('email_conf',$user_detail->email, array('class'=>'pure-input-1'))}}</td>
+                    <td><input type="text" name="email_conf" value="" class="pure-input-1"></td>
                 </tr>
                 <tr>
                     <th>電話番号</th>
-                    <td>{{Form::text('telephone_no',$user_detail->telephone_no, array('class'=>'pure-input-1'))}}</td>
+                    <td><input type="text" name="telephone_no" value="" class="pure-input-1"></td>
                 </tr>
                 <tr>
                     <th>生年月日</th>
-                    <td>{{Form::text('birthday',$user_detail->birthday, array('class'=>'pure-input-1'))}}</td>
+                    <td><input type="text" name="birthday" value="" class="pure-input-1"></td>
                 </tr>
                 <tr>
                     <th>ノート</th>
-                    <td><textarea name="note" class="pure-input-1">@if(isset($comment)) {{$comment->content}} @endif</textarea></td>
+                    <td><textarea name="note" class="pure-input-1"></textarea></td>
                 </tr>
                 <tr>
                     <th>パスワード</th>
-                    <td>{{Form::text('password','', array('class'=>'pure-input-1'))}}</td>
+                    <td><input type="password" name="password" class="pure-input-1"></td>
                 </tr>
                 <tr>
                     <td colspan="2" align="right">
-                        <a class="pure-button pure-button-primary" href="{{URL::route('employee.detail',$id)}}">戻る</a>
+                        <a class="pure-button pure-button-primary" href="{{ URL::route('boss.search') }}">検索画面へ</a>
                         {{ Form::submit('確認',array('class'=>'pure-button button-error')) }}
                     </td>
                 </tr>
             </tbody>
         </table>
-    {{Form::close()}}
+        {{Form::close()}}
     </section>
 </section>
 
