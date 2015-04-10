@@ -8,6 +8,7 @@
         @include('layout.admincommon', ['name' => $user_own->name,'role_id' =>$user_own->id])
 </nav>
 </header>
+    {{ HTML::style('asset/css/lis.css') }}
 
 <section class="contents">
     <h2>トップページ</h2>
@@ -43,8 +44,16 @@
             </thead>
             <tbody>
                 
-            @foreach($list_users as $admin)
-                <tr class="pure-table-odd">
+            @foreach($list_users as $key =>$admin)
+                <?php
+                    if($key%2 == 0){
+                        $class = 'pure-table-odd';
+                    }
+                    else{
+                        $class = '';
+                    }
+                ?>
+                <tr class="{{$class}}">
                     <?php 
                     if($admin['role_id'] == 2)
                         $permission = BOSS_PERMISSION;

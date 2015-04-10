@@ -36,9 +36,9 @@
                 <tr>
                     <td>生年月日</td>
                     <td colspan="3">
-                    {{Form::text('start_date','', array('placeholder'=>'開始日'))}}
+                    <input type="text" name="start_date" value="" placeholder="開始日">
                         &nbsp;～&nbsp;
-                        {{Form::text('end_date','', array('placeholder'=>'終了日'))}}
+                        <input type="text" name="end_date" value="" placeholder="終了日">
                     </td>
                 </tr>
                 @if($user_own->role_id == ADMIN)
@@ -90,8 +90,16 @@
                 </tr>
             </thead>
             <tbody>
-            @foreach($list_users as $search_list)
-                <tr class="pure-table-odd">
+            @foreach($list_users as $key=>$search_list)
+                <?php
+                    if($key%2 == 0){
+                        $class = 'pure-table-odd';
+                    }
+                    else{
+                        $class = '';
+                    }
+                ?>
+                <tr class="{{$class}}">
                     <td>{{$search_list->id}}</td>
                     <td><a href="{{ URL::route('employee.detail',$search_list->id) }}">{{$search_list->name}}</a></td>
                     <td>{{$search_list->email}}</td>

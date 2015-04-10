@@ -5,6 +5,7 @@ use Prototype\Forms\Admin\BossEditForm;
 use Prototype\Forms\Admin\BossEmailForm;
 use Prototype\Forms\Admin\SearchForm;
 use Prototype\Forms\Admin\AdminEditForm;
+use Prototype\Forms\Admin\EmailFormAdd;
 class VituralController extends CommonController {
     public function __construct(
         LoginForm $loginForm,
@@ -12,7 +13,8 @@ class VituralController extends CommonController {
         BossEditForm $bossEditForm,
         BossEmailForm $bossEmailForm,
         SearchForm $searchForm,
-        AdminEditForm $adminEditForm
+        AdminEditForm $adminEditForm,
+        EmailFormAdd $emailFormAdd
         )
     {
         $this->loginForm = $loginForm;
@@ -21,7 +23,8 @@ class VituralController extends CommonController {
         $this->bossEmailForm = $bossEmailForm;
         $this->searchForm = $searchForm;
         $this->adminEditForm = $adminEditForm;
-        $this->beforeFilter('employee', array('except'=>array('getLogin','postLogin')));
+        $this->emailFormAdd = $emailFormAdd;
+        $this->beforeFilter('employee', array('except'=>array('getLogin','postLogin','lo')));
         $this->beforeFilter('admin', array('only'=>array(
                                                     'bossTop','bossSearch',
                                                     'bossSearchDetail','employeeDetail','employeeEditDetail','employeeEditDetailConfirm',
@@ -29,8 +32,14 @@ class VituralController extends CommonController {
                                                     'employeeDeleteConfirm','employeeDeleteComplete','add','addConfirm','addComplete',
                                                     'adminTop'
                                                     )));
+        $this->beforeFilter('@returnUsernameHeader',array('except' =>array('getLogin','postLogin','logout')));
     }
 
+    public function returnUsernameHeader()
+    {
+        $name = \User::find(\Auth::user()->id)->name;
+        \View::share(compact('name'));
+    }
 
     public function getLogin()
     {
@@ -116,7 +125,8 @@ class VituralController extends CommonController {
         $input = \Input::all();
         $boss_id = \Auth::user()->id;
         $user_own = \User::find($boss_id);
-        $this->searchForm->validate($input, NULL);
+        $this->searchForm->validateDates()->validate($input, NULL);
+        // $this->searchForm->validate($input, NULL);
         $search = $this->commonSearch('users',$input);
         $search = $search->paginate(PAGINATE);
         $list_users = $search;
@@ -246,12 +256,8 @@ class VituralController extends CommonController {
         $create_user = $this->commonUpdateUser($input);
         $create_user['content']= $input['note'];
         $create_user['password']= $input['password'];
-        $this->bossEditForm->validate($create_user, NULL);
-        $create_user['password'] = \Hash::make($input['password']);
-        if(\User::where('email',$input['email'] !=NULL)){
-            $this->bossEmailForm->validate($input, NULL);
-        }
-        $create_user['manager_id'] = \Auth::user()->id;
+        $create_user['email_conf'] = $input['email_conf'];
+        $this->emailFormAdd->validate($create_user, NULL);
         return \View::make('boss.addconf')->with(compact('input'));
     }
     public function addComplete()
@@ -279,7 +285,7 @@ class VituralController extends CommonController {
         $input = \Input::all();
         $admin_id = \Auth::user()->id;
         $user_own = \User::find($admin_id);
-        $this->searchForm->validate($input, NULL);
+        $this->searchForm->validateDates()->validate($input, NULL);
         $search = $this->commonSearch('users',$input);
         if(isset($input['admin']))
         {

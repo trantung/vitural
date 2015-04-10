@@ -6,7 +6,7 @@
 <header>
     <nav class="home-menu pure-menu pure-menu-horizontal relative">
         <h1 class="pure-menu-heading"><a href="">社員管理システム</a></h1>
-        @include('layout.bosscommon', ['name' => '岸 由一郎'])
+        @include('layout.bosscommon', ['name' => $name)
 
 </header>
 <section class="contents">
@@ -39,35 +39,68 @@
                     <th>名前</th>
                     <td>
                    {{Form::text('name',$user_detail->name, array('class'=>'pure-input-1'))}}
+                   @if($errors->has('name') && $error_messages ==1)
+                       <section class="error-box">{{$errors->first('name')}}</section>
+                    @endif
                     </td>
                 </tr>
                 <tr>
                     <th>名前（カナ）</th>
-                    <td>{{Form::text('kana',$user_detail->kana, array('class'=>'pure-input-1'))}}</td>
+                    <td>{{Form::text('kana',$user_detail->kana, array('class'=>'pure-input-1'))}}
+                    @if($errors->has('kana') && $error_messages ==1)
+                       <section class="error-box">{{$errors->first('kana')}}</section>
+                    @endif
+                    </td>
                 </tr>
                 <tr>
                     <th>メールアドレス</th>
-                    <td>{{Form::text('email',$user_detail->email, array('class'=>'pure-input-1'))}}</td>
+                    <td>{{Form::text('email',$user_detail->email, array('class'=>'pure-input-1'))}}
+                    @if($errors->has('email') && $error_messages ==1)
+                       <section class="error-box">{{$errors->first('email')}}</section>
+                    @endif
+                    </td>
                 </tr>
                 <tr>
                     <th>メールアドレス（確認）</th>
-                    <td>{{Form::text('email_conf',$user_detail->email, array('class'=>'pure-input-1'))}}</td>
+                    <td>{{Form::text('email_conf',$user_detail->email, array('class'=>'pure-input-1'))}}
+                    @if($errors->has('email_conf') && $error_messages ==1)
+                       <section class="error-box">{{$errors->first('email_conf')}}</section>
+                    @endif
+                    </td>
                 </tr>
                 <tr>
                     <th>電話番号</th>
-                    <td>{{Form::text('telephone_no',$user_detail->telephone_no, array('class'=>'pure-input-1'))}}</td>
+                    <td>{{Form::text('telephone_no',$user_detail->telephone_no, array('class'=>'pure-input-1'))}}
+                    @if($errors->has('telephone_no') && $error_messages ==1)
+                       <section class="error-box">{{$errors->first('telephone_no')}}</section>
+                    @endif
+                    </td>
                 </tr>
                 <tr>
                     <th>生年月日</th>
-                    <td>{{Form::text('birthday',$user_detail->birthday, array('class'=>'pure-input-1'))}}</td>
+                    <td>{{Form::text('birthday',$user_detail->birthday, array('class'=>'pure-input-1'))}}
+                    @if($errors->has('birthday') && $error_messages ==1)
+                       <section class="error-box">{{$errors->first('birthday')}}</section>
+                    @endif
+                    </td>
                 </tr>
                 <tr>
                     <th>ノート</th>
-                    <td><textarea name="note" class="pure-input-1">@if(isset($comment)) {{$comment->content}} @endif</textarea></td>
+                    <td>
+                    <textarea name="note" class="pure-input-1">
+                        @if(isset($comment)) {{$comment->content}} @endif</textarea>
+                        @if($errors->has('note') && $error_messages ==1)
+                       <section class="error-box">{{$errors->first('note')}}</section>
+                        @endif
+                    </td>
                 </tr>
                 <tr>
                     <th>パスワード</th>
-                    <td><input type="password" name="password" class="pure-input-1"></td>
+                    <td><input type="password" name="password" class="pure-input-1">
+                    @if($errors->has('password') && $error_messages ==1)
+                       <section class="error-box">{{$errors->first('password')}}</section>
+                    @endif
+                    </td>
                 </tr>
                 @if($role_id == ADMIN)
                 <tr>
