@@ -123,7 +123,7 @@ return array(
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 		'Prototype\ServiceProviders\InterfaceServiceProvider',
         'Prototype\ServiceProviders\EventsServiceProvider',
-        // 'Prototype\ServiceProviders\ExceptionsServiceProvider',
+        'Prototype\ServiceProviders\ExceptionsServiceProvider',
         'Laracasts\Validation\ValidationServiceProvider',
 
 	),

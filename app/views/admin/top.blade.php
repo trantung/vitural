@@ -14,19 +14,10 @@
     <h2>トップページ</h2>
         
     <nav class="pure-menu pure-menu-horizontal">
-    {{$list_users->links()}}
 
-{{--         <ul class="pure-menu-list">
-            <li class="pure-menu-item"><a href="" class="pure-menu-link pure-button">first</a></li>
-            <li class="pure-menu-item"><a href="" class="pure-menu-link pure-button">back</a></li>
-            <li class="pure-menu-item">...</li>
-            <li class="pure-menu-item"><a href="" class="pure-menu-link pure-button">3</a></li>
-            <li class="pure-menu-item"><button class="pure-button pure-button-disabled">4</button></li>
-            <li class="pure-menu-item"><a href="" class="pure-menu-link pure-button">5</a></li>
-            <li class="pure-menu-item">...</li>
-            <li class="pure-menu-item"><a href="" class="pure-menu-link pure-button">next</a></li>
-            <li class="pure-menu-item"><a href="" class="pure-menu-link pure-button">last</a></li>
-        </ul> --}}
+        <ul class="pure-menu-list">
+            {{ with(new Paginate($list_users))->render() }}
+        </ul> 
     </nav>
     <section>
     @if(!empty($list_users))
@@ -75,18 +66,11 @@
     </section>
 
     <nav class="pure-menu pure-menu-horizontal">
-{{--         <ul class="pure-menu-list">
-            <li class="pure-menu-item"><a href="" class="pure-menu-link pure-button">first</a></li>
-            <li class="pure-menu-item"><a href="" class="pure-menu-link pure-button">back</a></li>
-            <li class="pure-menu-item">...</li>
-            <li class="pure-menu-item"><a href="" class="pure-menu-link pure-button">3</a></li>
-            <li class="pure-menu-item"><button class="pure-button pure-button-disabled">4</button></li>
-            <li class="pure-menu-item"><a href="" class="pure-menu-link pure-button">5</a></li>
-            <li class="pure-menu-item">...</li>
-            <li class="pure-menu-item"><a href="" class="pure-menu-link pure-button">next</a></li>
-            <li class="pure-menu-item"><a href="" class="pure-menu-link pure-button">last</a></li>
-        </ul> --}}
-            {{$list_users->links()}}
+        <ul class="pure-menu-list">
+            <ul class="pagination ">
+                {{ with(new Paginate($list_users))->render() }}
+            </ul>
+        </ul> 
     </nav>
 </section>
 

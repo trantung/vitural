@@ -257,7 +257,7 @@ class VituralController extends CommonController {
         $create_user['content']= $input['note'];
         $create_user['password']= $input['password'];
         $create_user['email_conf'] = $input['email_conf'];
-        $this->emailFormAdd->validate($create_user, NULL);
+        $this->emailFormAdd->validateDates()->validate($create_user, NULL);
         return \View::make('boss.addconf')->with(compact('input'));
     }
     public function addComplete()

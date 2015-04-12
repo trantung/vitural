@@ -8,7 +8,7 @@ class EmailFormAdd extends BaseForm
                             'name'=> 'required|max:16',
                             'kana'=> 'required|max:16',
                             'telephone_no'=> 'required',
-                            'birthday'=> 'required|date_format:Y-m-d|after:1970-01-01',
+                            'birthday'=> 'required|date:Y-m-d|after:1970-01-01',
                             'password'=> 'required|between:8,32',
                             'content'=> 'required|max:300',
                             'email'=>'required|email|unique:users',
@@ -24,8 +24,9 @@ class EmailFormAdd extends BaseForm
                                 'birthday.required' =>'生年月日を入力してください。',
                                 'password.required' =>'パスワードを入力してください。',
                                 'password.between' =>'パスワード は8文字以上、32文字以内で入力してください。',
-                                'birthday.date_format' =>'生年月日 はYYYY-mm-dd形式で入力してください。',
+                                'birthday.date' =>'生年月日 はYYYY-mm-dd形式で入力してください。',
                                 'birthday.after' =>'生年月日 は1970-01-01から までの範囲で入力してください。',
+                                'birthday.before' =>'生年月日（開始日） は1970-01-01から{now year - 10year}-01-01までの範囲で入力してください。',
                                 'birthday.required' =>'生年月日 を入力してください。',
                                 'content.max' =>'ノート は300文字以内で入力してください。',
                                 'content.required' =>'必須入力項目 ノート が入力されていません。',
@@ -36,4 +37,8 @@ class EmailFormAdd extends BaseForm
                                 'email_conf.same' =>'メールアドレスと メールアドレス（確認）が異なっています。',
                                 'email_conf.email' =>'メールアドレスと には有効なメールアドレスを入力してください。',
                             );
+    public function validateDates() {
+        $this->rules['birthday'] .= '|before:' . (date('Y') - 10) . '-01-01';
+    return $this;
+    }
 }

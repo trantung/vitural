@@ -17,6 +17,12 @@ class CommentTableSeeder extends Seeder {
                                 'created_at' => $now, 
                                 'updated_at' => $now
                                 ),
+                            array(
+                                'user_id'=>5, 
+                                'content'=>'comment user5', 
+                                'created_at' => $now, 
+                                'updated_at' => $now
+                                ),
                         ));
 
     }

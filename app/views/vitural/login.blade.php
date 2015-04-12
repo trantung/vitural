@@ -25,11 +25,11 @@
 
      {{ Form::open(array('id'=>'form','route'=>'vitural.postlogin','class' => 'pure-form')) }}
             <fieldset class="pure-group">
-            {{ Form::text('email','',array('class'=>'pure-input-1-4 required','placeholder'=>'メールアドレス')) }}
+            <input type="text" name="email" class="pure-input-1-4 required" placeholder="メールアドレス">
             @if($errors->has('email') && $error_messages ==1)
                <section class="error-box">{{ EMAIL_REQUIRED }}</section>
             @endif
-            {{ Form::text('password','',array('class'=>'pure-input-1-4 required','placeholder'=>'パスワード')) }}
+            <input type="password" name="password" class="pure-input-1-4 required" placeholder="パスワード">
             @if($errors->has('password')&& $error_messages ==1)
                 <section class="error-box">{{ PASSWORD_REQUIRED }}</section>
             @endif

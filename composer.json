@@ -20,7 +20,8 @@
             "Prototype\\": "app/lib/Prototype"
         },
         "files":[
-            "app/helpers/functions.php"
+            "app/helpers/functions.php",
+            "app/helpers/Paginate.php"
         ]
     },
     "scripts": {
